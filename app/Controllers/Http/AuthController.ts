@@ -19,4 +19,15 @@ export default class AuthController {
 
     return { token }
   }
+
+  public async login({ request, auth, response }: HttpContextContract) {
+    const { email, password } = request.only(['email', 'password'])
+
+    try {
+      const { token } = await auth.attempt(email, password)
+      return { token }
+    } catch (e) {
+      response.unauthorized({ error: 'Invalid credentials' })
+    }
+  }
 }
