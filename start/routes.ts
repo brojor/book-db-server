@@ -29,3 +29,5 @@ Route.post('login', 'AuthController.login')
 
 Route.get('books', 'BooksController.index')
 Route.post('books', 'BooksController.store')
+
+Route.get('authors', 'AuthorsController.index')
