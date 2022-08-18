@@ -25,6 +25,7 @@ export default class AuthorsController {
       JOIN authors ON books.author_id = authors.id
       WHERE collection_id = ?
       GROUP BY books.author_id, authors.first_name, authors.last_name
+      ORDER BY authors.first_name
     `,
       [userCollection.id]
     )
