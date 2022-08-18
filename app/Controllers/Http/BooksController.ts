@@ -15,7 +15,7 @@ export default class BooksController {
 
     const { rows } = await Database.rawQuery(
       `
-    SELECT CONCAT(authors.first_name, ' ', authors.last_name) as Author,
+    SELECT CONCAT(authors.first_name, ' ', authors.last_name) as author_name, authors.id as author_id,
     books.id, books.title, book_collection.created_at
     FROM book_collection
     JOIN books ON book_collection.book_id = books.id
