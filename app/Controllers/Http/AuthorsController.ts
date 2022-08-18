@@ -1,10 +1,17 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Database from '@ioc:Adonis/Lucid/Database'
-import BookCollection from 'App/Models/BookCollection'
 import Collection from 'App/Models/Collection'
+import { string } from '@ioc:Adonis/Core/Helpers'
+
+function changeKeysToCamelCase(obj: { [key: string]: any }) {
+  return Object.keys(obj).reduce((newObj, key) => {
+    newObj[string.camelCase(key)] = obj[key]
+    return newObj
+  }, {} as { [key: string]: any })
+}
 
 export default class AuthorsController {
-  public async index({ request, auth }: HttpContextContract) {
+  public async index({ auth }: HttpContextContract) {
     await auth.use('api').authenticate()
     const user = auth.use('api').user!
 
@@ -12,7 +19,7 @@ export default class AuthorsController {
 
     const { rows } = await Database.rawQuery(
       `
-      SELECT books.author_id, CONCAT(authors.first_name, ' ', authors.last_name) AS author, COUNT(books.author_id)
+      SELECT books.author_id AS id, authors.first_name, authors.last_name, COUNT(books.author_id) AS num_of_books
       FROM book_collection
       JOIN books ON book_collection.book_id = books.id
       JOIN authors ON books.author_id = authors.id
@@ -22,6 +29,6 @@ export default class AuthorsController {
       [userCollection.id]
     )
 
-    return rows
+    return rows.map((book) => changeKeysToCamelCase(book))
   }
 }
