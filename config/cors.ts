@@ -44,11 +44,10 @@ const corsConfig: CorsConfig = {
   |                     one of the above values.
   |
   */
-  origin: (requestOrigin: string) => {
-    return (
-      requestOrigin === 'http://localhost:5173' || /^http:\/\/192\.168\.1\./.test(requestOrigin)
-    )
-  },
+  origin: true,
+  // origin: (requestOrigin: string) => {
+  //   return requestOrigin === 'http://localhost:5173' || /^http:\/\/192\.168\./.test(requestOrigin)
+  // },
 
   /*
   |--------------------------------------------------------------------------
