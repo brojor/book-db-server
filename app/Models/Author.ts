@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import Book from './Book'
 
 export default class Author extends BaseModel {
@@ -20,4 +20,9 @@ export default class Author extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @computed()
+  public get fullName(): string {
+    return `${this.firstName} ${this.lastName}`
+  }
 }
