@@ -9,13 +9,14 @@ import {
 } from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
 import Book from './Book'
+import CollectionType from 'App/enums/CollectionType'
 
 export default class Collection extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public name: string
+  public type: CollectionType
 
   @column()
   public userId: number

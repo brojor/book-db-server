@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import CollectionType from 'App/enums/CollectionType'
 import Collection from 'App/Models/Collection'
 import CollectionService from 'App/Services/CollectionService'
 
@@ -7,9 +8,10 @@ export default class BooksController {
     await auth.use('api').authenticate()
     const user = auth.use('api').user!
 
-    const collection = await Collection.query()
-      .where({ userId: user.id, name: 'default' })
-      .firstOrFail()
+    const collection = await Collection.firstOrCreate({
+      userId: user.id,
+      type: CollectionType.DEFAULT,
+    })
 
     return await CollectionService.getBooks({ collection })
   }
@@ -19,9 +21,11 @@ export default class BooksController {
     const user = auth.use('api').user!
 
     const { author, title } = request.only(['author', 'title'])
-    const collection = await Collection.query()
-      .where({ userId: user.id, name: 'default' })
-      .firstOrFail()
+
+    const collection = await Collection.firstOrCreate({
+      userId: user.id,
+      type: CollectionType.DEFAULT,
+    })
 
     await CollectionService.addBook({ collection, author, title })
 
