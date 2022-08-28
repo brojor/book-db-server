@@ -3,8 +3,8 @@ import CollectionType from 'App/enums/CollectionType'
 import Collection from 'App/Models/Collection'
 import CollectionService from 'App/Services/CollectionService'
 
-export default class BooksController {
-  public async index({ auth, params }: HttpContextContract) {
+export default class CollectionsController {
+  public async index({ params, auth }: HttpContextContract) {
     const collectionType = getCollectionType(params.collectionType)
 
     await auth.use('api').authenticate()
@@ -14,24 +14,6 @@ export default class BooksController {
       userId: user.id,
       type: collectionType,
     })
-
-    return await CollectionService.getBooks({ collection })
-  }
-
-  public async store({ request, auth, params }: HttpContextContract) {
-    const collectionType = getCollectionType(params.collectionType)
-
-    await auth.use('api').authenticate()
-    const user = auth.use('api').user!
-
-    const { author, title } = request.only(['author', 'title'])
-
-    const collection = await Collection.firstOrCreate({
-      userId: user.id,
-      type: collectionType,
-    })
-
-    await CollectionService.addBook({ collection, author, title })
 
     const books = await CollectionService.getBooks({ collection })
     const authors = await CollectionService.getAuthors({ collection })
@@ -41,6 +23,18 @@ export default class BooksController {
       authors,
     }
   }
+
+  public async create({}: HttpContextContract) {}
+
+  public async store({}: HttpContextContract) {}
+
+  public async show({}: HttpContextContract) {}
+
+  public async edit({}: HttpContextContract) {}
+
+  public async update({}: HttpContextContract) {}
+
+  public async destroy({}: HttpContextContract) {}
 }
 
 function getCollectionType(paramString: string) {

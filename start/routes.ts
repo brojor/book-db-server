@@ -27,7 +27,9 @@ Route.get('/', async () => {
 Route.post('register', 'AuthController.register')
 Route.post('login', 'AuthController.login')
 
-Route.get('books', 'BooksController.index')
-Route.post('books', 'BooksController.store')
+Route.get('books/:collectionType', 'BooksController.index')
+Route.post('books/:collectionType', 'BooksController.store')
+
+Route.get('collections/:collectionType', 'CollectionsController.index')
 
 Route.get('authors', 'AuthorsController.index')
