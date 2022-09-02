@@ -18,6 +18,7 @@
 |
 */
 
+import { Router } from '@adonisjs/core/build/standalone'
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', async () => {
@@ -33,3 +34,5 @@ Route.post('books/:collectionType', 'BooksController.store')
 Route.get('collections/:collectionType', 'CollectionsController.index')
 
 Route.get('authors', 'AuthorsController.index')
+
+Route.get('/isbn/:isbn', 'IsbnsController.index')
