@@ -15,7 +15,25 @@ export default class Book extends BaseModel {
   public id: number
 
   @column()
+  public isbn: number
+
+  @column()
   public title: string
+
+  @column()
+  public subtitle?: string
+
+  @column()
+  public pageCount?: number
+
+  @column()
+  public publisher?: string
+
+  @column()
+  public publishedDate?: string
+
+  @column()
+  public language?: string
 
   @column()
   public authorId: number

@@ -1,5 +1,6 @@
 import Database from '@ioc:Adonis/Lucid/Database'
 import Author from 'App/Models/Author'
+import Book from 'App/Models/Book'
 import Collection from 'App/Models/Collection'
 
 interface BaseOptions {
@@ -10,12 +11,18 @@ interface GetBooksOptions extends BaseOptions {
   authorId?: number
 }
 
-interface AddBookOptions extends BaseOptions {
-  author: {
-    firstName: string
-    lastName: string
-  }
+interface BookToAdd {
+  author: string
   title: string
+  subtitle?: string
+  pageCount?: number
+  publisher?: string
+  publishedDate?: string
+  language?: string
+}
+
+interface AddBookOptions extends BaseOptions {
+  book: BookToAdd
 }
 
 export default class CollectionService {
@@ -47,12 +54,11 @@ export default class CollectionService {
     }))
   }
 
-  public static async addBook({ collection, author, title }: AddBookOptions) {
-    const dbAuthor = await Author.firstOrCreate({
-      firstName: author.firstName,
-      lastName: author.lastName,
-    })
+  public static async addBook({ collection, book }: AddBookOptions) {
+    const { author, ...bookData } = book
+    const [firstName, lastName] = author.split(' ') // TODO: change author db model and migration to use FullName instead of firstName and lastName OR use middleName
+    const dbAuthor = await Author.firstOrCreate({ firstName, lastName })
 
-    await collection.related('books').create({ title, authorId: dbAuthor.id })
+    await collection.related('books').create({ authorId: dbAuthor.id, ...bookData })
   }
 }

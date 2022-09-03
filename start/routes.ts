@@ -32,6 +32,7 @@ Route.get('books/:collectionType', 'BooksController.index')
 Route.post('books/:collectionType', 'BooksController.store')
 
 Route.get('collections/:collectionType', 'CollectionsController.index')
+Route.post('collections/:collectionType', 'CollectionsController.store')
 
 Route.get('authors', 'AuthorsController.index')
 
