@@ -61,4 +61,8 @@ export default class CollectionService {
 
     await collection.related('books').create({ authorId: dbAuthor.id, ...bookData })
   }
+
+  public static async removeBooks({ collection, bookIds }: BaseOptions & { bookIds: number[] }) {
+    await collection.related('books').detach(bookIds)
+  }
 }

@@ -57,7 +57,27 @@ export default class CollectionsController {
 
   public async update({}: HttpContextContract) {}
 
-  public async destroy({}: HttpContextContract) {}
+  public async destroy({ auth, request, params }: HttpContextContract) {
+    const collectionType = getCollectionType(params.collectionType)
+    await auth.use('api').authenticate()
+    const user = auth.use('api').user!
+    const { bookIds } = request.body()
+
+    const collection = await Collection.query()
+      .where('userId', user.id)
+      .where('type', collectionType)
+      .firstOrFail()
+
+    await CollectionService.removeBooks({ collection, bookIds })
+
+    const books = await CollectionService.getBooks({ collection })
+    const authors = await CollectionService.getAuthors({ collection })
+
+    return {
+      books,
+      authors,
+    }
+  }
 }
 
 function getCollectionType(paramString: string) {
