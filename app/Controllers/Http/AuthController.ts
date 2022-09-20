@@ -14,7 +14,12 @@ export default class AuthController {
       password: schema.string([rules.minLength(8)]),
     })
 
-    const validCredentials = await request.validate({ schema: userSchema })
+    const validCredentials = await request.validate({
+      schema: userSchema,
+      messages: {
+        'email.unique': 'Tento email je již použitý',
+      },
+    })
     const user = await User.create(validCredentials)
     await Collection.createMany([
       { userId: user.id, type: CollectionType.DEFAULT },
