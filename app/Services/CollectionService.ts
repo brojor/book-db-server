@@ -65,4 +65,17 @@ export default class CollectionService {
   public static async removeBooks({ collection, bookIds }: BaseOptions & { bookIds: number[] }) {
     await collection.related('books').detach(bookIds)
   }
+
+  public static async moveBooks({
+    sourceCollection,
+    targetCollection,
+    bookIds,
+  }: {
+    sourceCollection: Collection
+    targetCollection: Collection
+    bookIds: number[]
+  }) {
+    await sourceCollection.related('books').detach(bookIds)
+    await targetCollection.related('books').attach(bookIds)
+  }
 }

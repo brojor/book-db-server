@@ -55,7 +55,35 @@ export default class CollectionsController {
 
   public async edit({}: HttpContextContract) {}
 
-  public async update({}: HttpContextContract) {}
+  public async update({ params, request, auth }: HttpContextContract) {
+    const user = await auth.use('api').authenticate()
+
+    const sourceCollectionType = getCollectionType(params.collectionType)
+    const targetCollectionType = getCollectionType(request.qs().target)
+    const { bookIds } = request.body()
+
+    const sourceCollection = await Collection.query()
+      .where('userId', user.id)
+      .where('type', sourceCollectionType)
+      .firstOrFail()
+    const targetCollection = await Collection.firstOrCreate({
+      userId: user.id,
+      type: targetCollectionType,
+    })
+
+    await CollectionService.moveBooks({ sourceCollection, targetCollection, bookIds })
+
+    return {
+      sourceCollection: {
+        books: await CollectionService.getBooks({ collection: sourceCollection }),
+        authors: await CollectionService.getAuthors({ collection: sourceCollection }),
+      },
+      targetCollection: {
+        books: await CollectionService.getBooks({ collection: targetCollection }),
+        authors: await CollectionService.getAuthors({ collection: targetCollection }),
+      },
+    }
+  }
 
   public async destroy({ auth, request, params }: HttpContextContract) {
     const collectionType = getCollectionType(params.collectionType)
@@ -80,13 +108,13 @@ export default class CollectionsController {
   }
 }
 
-function getCollectionType(paramString: string) {
-  switch (paramString) {
+function getCollectionType(collectionName: string) {
+  switch (collectionName) {
     case 'wishlist':
       return CollectionType.WISHLIST
     case 'default':
       return CollectionType.DEFAULT
     default:
-      throw new Error('Invalid collection type')
+      throw new Error(`Invalid collection name: ${collectionName}`)
   }
 }

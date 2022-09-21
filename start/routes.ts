@@ -33,6 +33,7 @@ Route.post('books/:collectionType', 'BooksController.store')
 Route.get('collections/:collectionType', 'CollectionsController.index')
 Route.post('collections/:collectionType', 'CollectionsController.store')
 Route.delete('collections/:collectionType', 'CollectionsController.destroy')
+Route.put('collections/:collectionType', 'CollectionsController.update')
 
 Route.get('authors', 'AuthorsController.index')
 
