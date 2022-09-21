@@ -19,6 +19,7 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
+import Collection from 'App/Models/Collection'
 
 Route.get('/', async () => {
   return { hello: 'world' }
@@ -34,6 +35,7 @@ Route.get('collections/:collectionType', 'CollectionsController.index')
 Route.post('collections/:collectionType', 'CollectionsController.store')
 Route.delete('collections/:collectionType', 'CollectionsController.destroy')
 Route.put('collections/:collectionType', 'CollectionsController.update')
+Route.patch('collections/:collectionType', 'CollectionsController.markAsRead')
 
 Route.get('authors', 'AuthorsController.index')
 

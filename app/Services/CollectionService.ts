@@ -38,10 +38,28 @@ export default class CollectionService {
   }
 
   public static async getBooks({ collection }: GetBooksOptions) {
-    return (await collection.related('books').query().preload('author')).map((book) => ({
-      ...book.serialize({ fields: { pick: ['id', 'title'] } }),
-      ...{ author: book.author.serialize({ fields: { pick: ['id', 'fullName'] } }) },
-    }))
+    const books = await Database.query()
+      .select('books.id', 'books.title', 'is_read AS isRead', 'authors.id as authorId')
+      .from('book_collection')
+      .join('books', 'book_collection.book_id', 'books.id')
+      .join('authors', 'books.author_id', 'authors.id')
+      .where('collection_id', collection.id)
+      .orderBy('books.title')
+    const bookWithAuthor = await Promise.all(
+      books.map(async (book) => {
+        const author = (await Author.findOrFail(book.authorId)).serialize({
+          fields: {
+            pick: ['id', 'fullName'],
+          },
+        })
+        return {
+          ...book,
+          authorId: undefined,
+          author,
+        }
+      })
+    )
+    return bookWithAuthor
   }
 
   public static async addBook({ collection, book }: AddBookOptions) {
@@ -66,5 +84,17 @@ export default class CollectionService {
   }) {
     await sourceCollection.related('books').detach(bookIds)
     await targetCollection.related('books').attach(bookIds)
+  }
+
+  public static setIsRead({
+    collection,
+    bookIds,
+    isRead,
+  }: BaseOptions & { bookIds: number[]; isRead: boolean }) {
+    return collection
+      .related('books')
+      .pivotQuery()
+      .whereIn('book_id', bookIds)
+      .update({ is_read: isRead })
   }
 }

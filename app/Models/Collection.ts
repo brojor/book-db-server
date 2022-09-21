@@ -26,6 +26,7 @@ export default class Collection extends BaseModel {
 
   @manyToMany(() => Book, {
     pivotTimestamps: true,
+    pivotColumns: ['is_read'],
   })
   public books: ManyToMany<typeof Book>
 

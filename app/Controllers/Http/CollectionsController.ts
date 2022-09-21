@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Database from '@ioc:Adonis/Lucid/Database'
 import CollectionType from 'App/enums/CollectionType'
 import Collection from 'App/Models/Collection'
 import CollectionService from 'App/Services/CollectionService'
@@ -53,7 +54,27 @@ export default class CollectionsController {
 
   public async show({}: HttpContextContract) {}
 
-  public async edit({}: HttpContextContract) {}
+  public async markAsRead({ auth, request, params }: HttpContextContract) {
+    const user = await auth.use('api').authenticate()
+    const collectionType = getCollectionType(params.collectionType)
+    const { bookIds } = request.body()
+    const { isRead } = request.qs()
+
+    const collection = await Collection.firstOrCreate({
+      userId: user.id,
+      type: collectionType,
+    })
+
+    await CollectionService.setIsRead({ collection, bookIds, isRead })
+
+    const books = await CollectionService.getBooks({ collection })
+    const authors = await CollectionService.getAuthors({ collection })
+
+    return {
+      books,
+      authors,
+    }
+  }
 
   public async update({ params, request, auth }: HttpContextContract) {
     const user = await auth.use('api').authenticate()
