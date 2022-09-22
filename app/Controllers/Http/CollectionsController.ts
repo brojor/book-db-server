@@ -1,5 +1,4 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Database from '@ioc:Adonis/Lucid/Database'
 import CollectionType from 'App/enums/CollectionType'
 import Collection from 'App/Models/Collection'
 import CollectionService from 'App/Services/CollectionService'

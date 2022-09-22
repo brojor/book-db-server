@@ -19,7 +19,6 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
-import Collection from 'App/Models/Collection'
 
 Route.get('/', async () => {
   return { hello: 'world' }
@@ -27,9 +26,6 @@ Route.get('/', async () => {
 
 Route.post('register', 'AuthController.register')
 Route.post('login', 'AuthController.login')
-
-Route.get('books/:collectionType', 'BooksController.index')
-Route.post('books/:collectionType', 'BooksController.store')
 
 Route.get('collections/:collectionType', 'CollectionsController.index')
 Route.post('collections/:collectionType', 'CollectionsController.store')

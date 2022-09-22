@@ -3,7 +3,7 @@ import Factory from '@ioc:Adonis/Lucid/Factory'
 import CollectionType from 'App/enums/CollectionType'
 import BookFactory from './BookFactory'
 
-export default Factory.define(Collection, ({ faker }) => {
+export default Factory.define(Collection, () => {
   return {
     type: CollectionType.DEFAULT,
     userId: 1,

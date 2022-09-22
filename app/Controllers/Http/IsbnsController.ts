@@ -2,15 +2,15 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import axios from 'axios'
 
 // { author, title, subtitle, isbn, pageCount, publisher, publishedDate, language }
-interface BookToAdd {
-  author: string
-  title: string
-  subtitle: string
-  pageCount: number
-  publisher: string
-  publishedDate: string
-  language: string
-}
+// interface BookToAdd {
+//   author: string
+//   title: string
+//   subtitle: string
+//   pageCount: number
+//   publisher: string
+//   publishedDate: string
+//   language: string
+// }
 
 // title + (subtitle), počet stran, rok vydání
 // ošetřit pokud nenajde knihu

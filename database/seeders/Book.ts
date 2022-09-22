@@ -2,8 +2,6 @@ import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import CollectionType from 'App/enums/CollectionType'
 import Collection from 'App/Models/Collection'
 import CollectionService from 'App/Services/CollectionService'
-import BookFactory from 'Database/factories/BookFactory'
-import CollectionFactory from 'Database/factories/CollectionFactory'
 import books from '../../books'
 
 export default class extends BaseSeeder {
@@ -22,14 +20,18 @@ export default class extends BaseSeeder {
       if (i % 8 === 0) {
         await CollectionService.addBook({
           collection: wishlistCollection,
-          author: { firstName: book.author_first_name, lastName: book.author_last_name },
-          title: book.title,
+          book: {
+            author: `${book.author_first_name} ${book.author_last_name}`,
+            title: book.title,
+          },
         })
       } else {
         await CollectionService.addBook({
           collection: defaultCollection,
-          author: { firstName: book.author_first_name, lastName: book.author_last_name },
-          title: book.title,
+          book: {
+            author: `${book.author_first_name} ${book.author_last_name}`,
+            title: book.title,
+          },
         })
       }
     }
