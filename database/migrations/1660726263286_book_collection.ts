@@ -13,7 +13,7 @@ export default class extends BaseSchema {
         .inTable('collections')
         .onDelete('CASCADE')
       table.integer('book_id').unsigned().references('id').inTable('books').onDelete('CASCADE')
-      table.boolean('is_read').defaultTo(false)
+      table.integer('read_status').unsigned().defaultTo(1)
       table.unique(['collection_id', 'book_id'])
 
       /**

@@ -1,6 +1,7 @@
 import Database from '@ioc:Adonis/Lucid/Database'
 import Author from 'App/Models/Author'
 import Collection from 'App/Models/Collection'
+import ReadStatus from 'App/enums/ReadStatus'
 
 interface BaseOptions {
   collection: Collection
@@ -39,7 +40,7 @@ export default class CollectionService {
 
   public static async getBooks({ collection }: GetBooksOptions) {
     const books = await Database.query()
-      .select('books.id', 'books.title', 'is_read AS isRead', 'authors.id as authorId')
+      .select('books.id', 'books.title', 'read_status AS readStatus', 'authors.id as authorId')
       .from('book_collection')
       .join('books', 'book_collection.book_id', 'books.id')
       .join('authors', 'books.author_id', 'authors.id')
@@ -86,15 +87,15 @@ export default class CollectionService {
     await targetCollection.related('books').attach(bookIds)
   }
 
-  public static setIsRead({
+  public static setReadStatus({
     collection,
     bookIds,
-    isRead,
-  }: BaseOptions & { bookIds: number[]; isRead: boolean }) {
+    readStatus,
+  }: BaseOptions & { bookIds: number[]; readStatus: ReadStatus }) {
     return collection
       .related('books')
       .pivotQuery()
       .whereIn('book_id', bookIds)
-      .update({ is_read: isRead })
+      .update({ read_status: readStatus })
   }
 }

@@ -57,14 +57,14 @@ export default class CollectionsController {
     const user = await auth.use('api').authenticate()
     const collectionType = getCollectionType(params.collectionType)
     const { bookIds } = request.body()
-    const { isRead } = request.qs()
+    const { readStatus } = request.qs()
 
     const collection = await Collection.firstOrCreate({
       userId: user.id,
       type: collectionType,
     })
 
-    await CollectionService.setIsRead({ collection, bookIds, isRead })
+    await CollectionService.setReadStatus({ collection, bookIds, readStatus })
 
     const books = await CollectionService.getBooks({ collection })
     const authors = await CollectionService.getAuthors({ collection })
