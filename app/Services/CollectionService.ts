@@ -40,7 +40,12 @@ export default class CollectionService {
 
   public static async getBooks({ collection }: GetBooksOptions) {
     const books = await Database.query()
-      .select('books.id', 'books.title', 'read_status AS readStatus', 'authors.id as authorId')
+      .select(
+        'books.id',
+        'read_status AS readStatus',
+        'authors.id as authorId',
+        Database.raw('CONCAT_WS(\' - \', books.title, books.subtitle) as "title"')
+      )
       .from('book_collection')
       .join('books', 'book_collection.book_id', 'books.id')
       .join('authors', 'books.author_id', 'authors.id')
