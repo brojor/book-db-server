@@ -1,15 +1,16 @@
 import Database from '@ioc:Adonis/Lucid/Database'
 import Author from 'App/Models/Author'
 import Collection from 'App/Models/Collection'
-import ReadStatus from 'App/enums/ReadStatus'
+import BookState from 'App/enums/BookState'
+import Book from 'App/Models/Book'
 
 interface BaseOptions {
   collection: Collection
 }
 
-interface GetBooksOptions extends BaseOptions {
-  authorId?: number
-}
+// interface GetBooksOptions extends BaseOptions {
+//   authorId?: number
+// }
 
 interface BookToAdd {
   author: string
@@ -23,35 +24,50 @@ interface BookToAdd {
 
 interface AddBookOptions extends BaseOptions {
   book: BookToAdd
+  bookState: BookState
 }
 
 export default class CollectionService {
-  public static getAuthors({ collection }: BaseOptions) {
+  public static getAuthors({ collection, bookState }: BaseOptions & { bookState?: BookState }) {
     return Database.query()
       .select('books.author_id AS id', 'authors.full_name AS fullName')
       .count('books.author_id', 'numOfBooks')
       .from('book_collection')
       .join('books', 'book_collection.book_id', 'books.id')
       .join('authors', 'books.author_id', 'authors.id')
-      .where('collection_id', collection.id)
+      .where((builder) => {
+        builder.where('collection_id', collection.id)
+        if (bookState) {
+          builder.where('book_state', bookState)
+        } else {
+          builder.whereNot('book_state', BookState.wishlist)
+        }
+      })
       .groupBy('books.author_id', 'authors.full_name')
       .orderBy('authors.full_name')
   }
 
-  public static async getBooks({ collection }: GetBooksOptions) {
+  public static async getBooks({ collection, bookState }: BaseOptions & { bookState?: BookState }) {
     const books = await Database.query()
       .select(
         'books.id',
-        'read_status AS readStatus',
+        'book_state AS bookState',
         'authors.id as authorId',
         Database.raw('CONCAT_WS(\' - \', books.title, books.subtitle) as "title"')
       )
       .from('book_collection')
       .join('books', 'book_collection.book_id', 'books.id')
       .join('authors', 'books.author_id', 'authors.id')
-      .where('collection_id', collection.id)
+      .where((builder) => {
+        builder.where('collection_id', collection.id)
+        if (bookState) {
+          builder.where('book_state', bookState)
+        } else {
+          builder.whereNot('book_state', BookState.wishlist)
+        }
+      })
       .orderBy('books.title')
-    const bookWithAuthor = await Promise.all(
+    return await Promise.all(
       books.map(async (book) => {
         const author = (await Author.findOrFail(book.authorId)).serialize({
           fields: {
@@ -65,42 +81,27 @@ export default class CollectionService {
         }
       })
     )
-    return bookWithAuthor
   }
 
-  public static async addBook({ collection, book }: AddBookOptions) {
+  public static async addBook({ collection, book, bookState }: AddBookOptions) {
     const { author, ...bookData } = book
     const dbAuthor = await Author.firstOrCreate({ fullName: author })
+    // TODO: check if book already exists
+    // const dbBook = await Book.firstOrCreate({ authorId: dbAuthor.id, isbn? or something similar })
+    const dbBook = await Book.create({ authorId: dbAuthor.id, ...bookData })
 
-    await collection.related('books').create({ authorId: dbAuthor.id, ...bookData })
+    await collection.related('books').attach({ [dbBook.id]: { book_state: bookState } })
   }
 
   public static async removeBooks({ collection, bookIds }: BaseOptions & { bookIds: number[] }) {
     await collection.related('books').detach(bookIds)
   }
 
-  public static async moveBooks({
-    sourceCollection,
-    targetCollection,
-    bookIds,
-  }: {
-    sourceCollection: Collection
-    targetCollection: Collection
-    bookIds: number[]
-  }) {
-    await sourceCollection.related('books').detach(bookIds)
-    await targetCollection.related('books').attach(bookIds)
-  }
-
-  public static setReadStatus({
+  public static setBookState({
     collection,
     bookIds,
-    readStatus,
-  }: BaseOptions & { bookIds: number[]; readStatus: ReadStatus }) {
-    return collection
-      .related('books')
-      .pivotQuery()
-      .whereIn('book_id', bookIds)
-      .update({ read_status: readStatus })
+    bookState,
+  }: BaseOptions & { bookIds: number[]; bookState: BookState }) {
+    return collection.related('books').pivotQuery().whereIn('book_id', bookIds).update({ book_state: bookState })
   }
 }

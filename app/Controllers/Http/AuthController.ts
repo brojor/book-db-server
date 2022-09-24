@@ -2,7 +2,6 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Collection from 'App/Models/Collection'
-import CollectionType from 'App/enums/CollectionType'
 
 export default class AuthController {
   public async register({ request, auth }: HttpContextContract) {
@@ -21,10 +20,7 @@ export default class AuthController {
       },
     })
     const user = await User.create(validCredentials)
-    await Collection.createMany([
-      { userId: user.id, type: CollectionType.DEFAULT },
-      { userId: user.id, type: CollectionType.WISHLIST },
-    ])
+    await Collection.create({ userId: user.id, type: 1 })
 
     const { token } = await auth.login(user)
 

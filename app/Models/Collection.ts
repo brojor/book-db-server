@@ -1,22 +1,15 @@
 import { DateTime } from 'luxon'
-import {
-  BaseModel,
-  BelongsTo,
-  belongsTo,
-  column,
-  ManyToMany,
-  manyToMany,
-} from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
 import Book from './Book'
-import CollectionType from 'App/enums/CollectionType'
+import BookState from 'App/enums/BookState'
 
 export default class Collection extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public type: CollectionType
+  public type: BookState
 
   @column()
   public userId: number
@@ -26,7 +19,7 @@ export default class Collection extends BaseModel {
 
   @manyToMany(() => Book, {
     pivotTimestamps: true,
-    pivotColumns: ['read_status'],
+    pivotColumns: ['book_state'],
   })
   public books: ManyToMany<typeof Book>
 

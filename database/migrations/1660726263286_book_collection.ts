@@ -1,4 +1,5 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
+import BookState from 'App/enums/BookState'
 
 export default class extends BaseSchema {
   protected tableName = 'book_collection'
@@ -6,14 +7,9 @@ export default class extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table
-        .integer('collection_id')
-        .unsigned()
-        .references('id')
-        .inTable('collections')
-        .onDelete('CASCADE')
+      table.integer('collection_id').unsigned().references('id').inTable('collections').onDelete('CASCADE')
       table.integer('book_id').unsigned().references('id').inTable('books').onDelete('CASCADE')
-      table.integer('read_status').unsigned().defaultTo(1)
+      table.integer('book_state').unsigned().defaultTo(BookState.unread)
       table.unique(['collection_id', 'book_id'])
 
       /**

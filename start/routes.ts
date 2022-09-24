@@ -27,12 +27,9 @@ Route.get('/', async () => {
 Route.post('register', 'AuthController.register')
 Route.post('login', 'AuthController.login')
 
-Route.get('collections/:collectionType', 'CollectionsController.index')
-Route.post('collections/:collectionType', 'CollectionsController.store')
-Route.delete('collections/:collectionType', 'CollectionsController.destroy')
-Route.put('collections/:collectionType', 'CollectionsController.update')
-Route.patch('collections/:collectionType', 'CollectionsController.markAsRead')
-
-Route.get('authors', 'AuthorsController.index')
+Route.get('collection/:state', 'CollectionsController.index')
+Route.post('collection/:state', 'CollectionsController.store')
+Route.delete('collection', 'CollectionsController.destroy')
+Route.put('collection/:state', 'CollectionsController.update')
 
 Route.get('/isbn/:isbn', 'IsbnsController.index')

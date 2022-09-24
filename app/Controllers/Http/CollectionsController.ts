@@ -1,140 +1,54 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import CollectionType from 'App/enums/CollectionType'
+import BookState from 'App/enums/BookState'
 import Collection from 'App/Models/Collection'
 import CollectionService from 'App/Services/CollectionService'
 import BookToAddValidator from 'App/Validators/BookToAddValidator'
 
 export default class CollectionsController {
   public async index({ params, auth }: HttpContextContract) {
-    const collectionType = getCollectionType(params.collectionType)
+    const bookState = BookState[params.state as string] as BookState | undefined
 
-    await auth.use('api').authenticate()
-    const user = auth.use('api').user!
+    if (bookState === undefined && params.state !== 'library') {
+      throw new Error(`Invalid book state: ${params.state}`)
+    }
 
-    const collection = await Collection.firstOrCreate({
-      userId: user.id,
-      type: collectionType,
-    })
+    const user = await auth.use('api').authenticate()
 
-    const books = await CollectionService.getBooks({ collection })
-    const authors = await CollectionService.getAuthors({ collection })
+    const collection = await Collection.firstOrCreate({ userId: user.id, type: 1 })
 
     return {
-      books,
-      authors,
+      books: await CollectionService.getBooks({ collection, bookState }),
+      authors: await CollectionService.getAuthors({ collection, bookState }),
     }
   }
-
-  public async create({}: HttpContextContract) {}
 
   public async store({ params, auth, request }: HttpContextContract) {
-    const collectionType = getCollectionType(params.collectionType)
+    const bookState = BookState[params.state as keyof typeof BookState] || BookState.unread
 
-    await auth.use('api').authenticate()
-    const user = auth.use('api').user!
-
-    const collection = await Collection.firstOrCreate({
-      userId: user.id,
-      type: collectionType,
-    })
-
-    const payload = await request.validate(BookToAddValidator)
-
-    await CollectionService.addBook({ collection, book: payload })
-
-    const books = await CollectionService.getBooks({ collection })
-    const authors = await CollectionService.getAuthors({ collection })
-
-    return {
-      books,
-      authors,
-    }
-  }
-
-  public async show({}: HttpContextContract) {}
-
-  public async markAsRead({ auth, request, params }: HttpContextContract) {
     const user = await auth.use('api').authenticate()
-    const collectionType = getCollectionType(params.collectionType)
-    const { bookIds } = request.body()
-    const { readStatus } = request.qs()
 
-    const collection = await Collection.firstOrCreate({
-      userId: user.id,
-      type: collectionType,
-    })
-
-    await CollectionService.setReadStatus({ collection, bookIds, readStatus })
-
-    const books = await CollectionService.getBooks({ collection })
-    const authors = await CollectionService.getAuthors({ collection })
-
-    return {
-      books,
-      authors,
-    }
+    const collection = await Collection.firstOrCreate({ userId: user.id, type: 1 })
+    const bookToAdd = await request.validate(BookToAddValidator)
+    await CollectionService.addBook({ collection, book: bookToAdd, bookState })
   }
 
   public async update({ params, request, auth }: HttpContextContract) {
     const user = await auth.use('api').authenticate()
-
-    const sourceCollectionType = getCollectionType(params.collectionType)
-    const targetCollectionType = getCollectionType(request.qs().target)
     const { bookIds } = request.body()
-
-    const sourceCollection = await Collection.query()
-      .where('userId', user.id)
-      .where('type', sourceCollectionType)
-      .firstOrFail()
-    const targetCollection = await Collection.firstOrCreate({
-      userId: user.id,
-      type: targetCollectionType,
-    })
-
-    await CollectionService.moveBooks({ sourceCollection, targetCollection, bookIds })
-
-    return {
-      sourceCollection: {
-        books: await CollectionService.getBooks({ collection: sourceCollection }),
-        authors: await CollectionService.getAuthors({ collection: sourceCollection }),
-      },
-      targetCollection: {
-        books: await CollectionService.getBooks({ collection: targetCollection }),
-        authors: await CollectionService.getAuthors({ collection: targetCollection }),
-      },
+    const bookState = BookState[params.state as keyof typeof BookState]
+    if (!bookState) {
+      throw new Error('Invalid bookState')
     }
+
+    const collection = await Collection.findByOrFail('userId', user.id)
+    await CollectionService.setBookState({ collection, bookIds, bookState })
   }
 
-  public async destroy({ auth, request, params }: HttpContextContract) {
-    const collectionType = getCollectionType(params.collectionType)
-    await auth.use('api').authenticate()
-    const user = auth.use('api').user!
+  public async destroy({ auth, request }: HttpContextContract) {
+    const user = await auth.use('api').authenticate()
     const { bookIds } = request.body()
 
-    const collection = await Collection.query()
-      .where('userId', user.id)
-      .where('type', collectionType)
-      .firstOrFail()
-
+    const collection = await Collection.findByOrFail('userId', user.id)
     await CollectionService.removeBooks({ collection, bookIds })
-
-    const books = await CollectionService.getBooks({ collection })
-    const authors = await CollectionService.getAuthors({ collection })
-
-    return {
-      books,
-      authors,
-    }
-  }
-}
-
-function getCollectionType(collectionName: string) {
-  switch (collectionName) {
-    case 'wishlist':
-      return CollectionType.WISHLIST
-    case 'default':
-      return CollectionType.DEFAULT
-    default:
-      throw new Error(`Invalid collection name: ${collectionName}`)
   }
 }
