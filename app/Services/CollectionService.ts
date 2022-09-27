@@ -53,7 +53,9 @@ export default class CollectionService {
         'books.id',
         'book_state AS bookState',
         'authors.id as authorId',
-        Database.raw('CONCAT_WS(\' - \', books.title, books.subtitle) as "title"')
+        Database.raw('CONCAT_WS(\' - \', books.title, books.subtitle) as "title"'),
+        'books.page_count AS pageCount',
+        'books.published_date AS publishedDate'
       )
       .from('book_collection')
       .join('books', 'book_collection.book_id', 'books.id')
