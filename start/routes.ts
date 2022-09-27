@@ -32,4 +32,6 @@ Route.post('collection/:state', 'CollectionsController.store')
 Route.delete('collection', 'CollectionsController.destroy')
 Route.put('collection/:state', 'CollectionsController.update')
 
+Route.get('books/:id', 'BooksController.show')
+
 Route.get('/isbn/:isbn', 'IsbnsController.index')
