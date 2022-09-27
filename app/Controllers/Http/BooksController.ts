@@ -10,12 +10,9 @@ export default class BooksController {
   public async store({}: HttpContextContract) {}
 
   public async show({ params }: HttpContextContract) {
-    console.log('show book')
-    console.log('id: ', params.id)
     const book = await Book.findOrFail(params.id)
-    const author = await Author.findOrFail(book.authorId)
 
-    return { ...book.serialize(), author: author.fullName }
+    return book
   }
 
   public async edit({}: HttpContextContract) {}
