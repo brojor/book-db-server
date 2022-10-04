@@ -1,0 +1,6 @@
+{
+  "bookToAdd": {
+    "author.required": "Bez mena autora sa bohužiaľ nezaobídem",
+    "title.required": "Uveďte prosím názov knihy"
+  }
+}

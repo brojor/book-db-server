@@ -1,0 +1,6 @@
+{
+  "bookToAdd": {
+    "author.required": "Bez jména autora se bohužel neobejdu",
+    "title.required": "Uveďte prosím název knihy"
+  }
+}

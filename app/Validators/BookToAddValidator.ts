@@ -1,4 +1,4 @@
-import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
+import { schema } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class BookToAddValidator {
@@ -26,8 +26,5 @@ export default class BookToAddValidator {
    * }
    *
    */
-  public messages: CustomMessages = {
-    'author.required': 'Bez jména autora se bohužel neobejdu.',
-    'title.required': 'Uveďte prosím název knihy.',
-  }
+  public messages = this.ctx.i18n.validatorMessages('validator.bookToAdd')
 }
