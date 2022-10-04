@@ -15,16 +15,5 @@ export default class BookToAddValidator {
     language: schema.string.optional(),
   })
 
-  /**
-   * Custom messages for validation failures. You can make use of dot notation `(.)`
-   * for targeting nested fields and array expressions `(*)` for targeting all
-   * children of an array. For example:
-   *
-   * {
-   *   'profile.username.required': 'Username is required',
-   *   'scores.*.number': 'Define scores as valid numbers'
-   * }
-   *
-   */
   public messages = this.ctx.i18n.validatorMessages('validator.bookToAdd')
 }
