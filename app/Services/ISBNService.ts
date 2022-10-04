@@ -13,16 +13,16 @@ export default class ISBNService {
 
     const { data } = await axios.get(`${this.apiURL}?${params}`)
 
-    if (data.totalItems > 0) {
-      const book = data.items[0]
-      const { title, subtitle, publishedDate, pageCount, language, publisher } = book.volumeInfo
+    if (!data.totalItems) return null
 
-      let author = book.volumeInfo.authors?.[0]
-      if (!author) {
-        const { data } = await axios.get(`${this.apiURL}/${book.id}`)
-        author = data.volumeInfo.authors?.[0]
-      }
-      return { author, title, subtitle, pageCount, publisher, publishedDate, language }
+    const book = data.items[0]
+    const { title, subtitle, publishedDate, pageCount, language, publisher } = book.volumeInfo
+
+    let author = book.volumeInfo.authors?.[0]
+    if (!author) {
+      const { data } = await axios.get(`${this.apiURL}/${book.id}`)
+      author = data.volumeInfo.authors?.[0]
     }
+    return { author, title, subtitle, pageCount, publisher, publishedDate, language }
   }
 }
