@@ -1,5 +1,4 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Author from 'App/Models/Author'
 import Book from 'App/Models/Book'
 
 export default class BooksController {
