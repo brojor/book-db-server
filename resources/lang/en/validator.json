@@ -1,6 +1,9 @@
 {
+  "shared": {
+    "email.unique": "The email has already been taken"
+  },
   "bookToAdd": {
-    "author.required": "Unfortunately, I can't do without the author's name.",
+    "author.required": "Unfortunately, I can't do without the author's name",
     "title.required": "Please provide the title of the book"
   }
 }

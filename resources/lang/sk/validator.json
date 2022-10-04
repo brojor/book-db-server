@@ -1,4 +1,7 @@
 {
+  "shared": {
+    "email.unique": "Tento e-mail sa už používa"
+  },
   "bookToAdd": {
     "author.required": "Bez mena autora sa bohužiaľ nezaobídem",
     "title.required": "Uveďte prosím názov knihy"

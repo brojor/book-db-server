@@ -15,9 +15,6 @@ export default class AuthController {
 
     const validCredentials = await request.validate({
       schema: userSchema,
-      messages: {
-        'email.unique': 'Tento email je již použitý',
-      },
     })
     const user = await User.create(validCredentials)
     await Collection.create({ userId: user.id, type: 1 })
