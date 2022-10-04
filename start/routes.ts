@@ -32,6 +32,6 @@ Route.post('collection/:state', 'CollectionsController.store').middleware('getUs
 Route.delete('collection', 'CollectionsController.destroy').middleware('getUserCollection')
 Route.put('collection/:state', 'CollectionsController.update').middleware('getUserCollection')
 
-Route.get('books/:id', 'BooksController.show')
+Route.get('books/:id', 'BooksController.show').middleware('auth')
 
-Route.get('/isbn/:isbn', 'IsbnsController.index')
+Route.get('/isbn/:isbn', 'IsbnsController.index').middleware('auth')

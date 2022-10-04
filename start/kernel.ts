@@ -43,4 +43,5 @@ Server.middleware.register([
 */
 Server.middleware.registerNamed({
   getUserCollection: () => import('App/Middleware/GetUserCollection'),
+  auth: () => import('App/Middleware/Auth'),
 })

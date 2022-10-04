@@ -53,18 +53,14 @@ export default class AuthMiddleware {
       'Unauthorized access',
       'E_UNAUTHORIZED_ACCESS',
       guardLastAttempted,
-      this.redirectTo,
+      this.redirectTo
     )
   }
 
   /**
    * Handle request
    */
-  public async handle (
-    { auth }: HttpContextContract,
-    next: () => Promise<void>,
-    customGuards: (keyof GuardsList)[]
-  ) {
+  public async handle({ auth }: HttpContextContract, next: () => Promise<void>, customGuards: (keyof GuardsList)[]) {
     /**
      * Uses the user defined guards or the default guard mentioned in
      * the config file
