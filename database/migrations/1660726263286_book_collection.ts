@@ -1,5 +1,5 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
-import BookState from 'App/enums/BookState'
+import BookState from 'App/Enums/BookState'
 
 export default class extends BaseSchema {
   protected tableName = 'book_collection'

@@ -1,7 +1,7 @@
 import Database from '@ioc:Adonis/Lucid/Database'
 import Author from 'App/Models/Author'
 import Collection from 'App/Models/Collection'
-import BookState from 'App/enums/BookState'
+import BookState from 'App/Enums/BookState'
 import Book from 'App/Models/Book'
 
 interface BaseOptions {

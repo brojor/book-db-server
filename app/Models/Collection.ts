@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
 import Book from './Book'
-import BookState from 'App/enums/BookState'
+import BookState from 'App/Enums/BookState'
 
 export default class Collection extends BaseModel {
   @column({ isPrimary: true })

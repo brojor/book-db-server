@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import BookState from 'App/enums/BookState'
+import BookState from 'App/Enums/BookState'
 import Collection from 'App/Models/Collection'
 import CollectionService from 'App/Services/CollectionService'
 import BookToAddValidator from 'App/Validators/BookToAddValidator'
