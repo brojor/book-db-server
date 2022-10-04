@@ -17,7 +17,7 @@ export default class User extends BaseModel {
   public rememberMeToken?: string
 
   @hasMany(() => Collection)
-  public posts: HasMany<typeof Collection>
+  public collections: HasMany<typeof Collection>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

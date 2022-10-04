@@ -27,10 +27,10 @@ Route.get('/', async () => {
 Route.post('register', 'AuthController.register')
 Route.post('login', 'AuthController.login')
 
-Route.get('collection/:state', 'CollectionsController.index')
-Route.post('collection/:state', 'CollectionsController.store')
-Route.delete('collection', 'CollectionsController.destroy')
-Route.put('collection/:state', 'CollectionsController.update')
+Route.get('collection/:state', 'CollectionsController.index').middleware('getUserCollection')
+Route.post('collection/:state', 'CollectionsController.store').middleware('getUserCollection')
+Route.delete('collection', 'CollectionsController.destroy').middleware('getUserCollection')
+Route.put('collection/:state', 'CollectionsController.update').middleware('getUserCollection')
 
 Route.get('books/:id', 'BooksController.show')
 
