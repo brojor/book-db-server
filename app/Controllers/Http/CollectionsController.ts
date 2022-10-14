@@ -8,13 +8,14 @@ export default class CollectionsController {
   public async index({ params, request }: HttpContextContract) {
     const bookState = BookState[params.state as string] as BookState | undefined
     const collection = request['collection'] as Collection
+    const sort = request.input('sort', 'title:asc').split(':') as [string, 'asc' | 'desc' | undefined]
 
     if (bookState === undefined && params.state !== 'library') {
       throw new Error(`Invalid book state: ${params.state}`)
     }
 
     return {
-      books: await CollectionService.getBooks({ collection, bookState }),
+      books: await CollectionService.getBooks({ collection, bookState, sort }),
       authors: await CollectionService.getAuthors({ collection, bookState }),
     }
   }

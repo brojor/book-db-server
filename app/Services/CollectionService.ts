@@ -3,6 +3,7 @@ import Author from 'App/Models/Author'
 import Collection from 'App/Models/Collection'
 import BookState from 'App/Enums/BookState'
 import Book from 'App/Models/Book'
+import { string } from '@ioc:Adonis/Core/Helpers'
 
 interface BaseOptions {
   collection: Collection
@@ -47,7 +48,11 @@ export default class CollectionService {
       .orderBy('authors.full_name')
   }
 
-  public static async getBooks({ collection, bookState }: BaseOptions & { bookState?: BookState }) {
+  public static async getBooks({
+    collection,
+    bookState,
+    sort,
+  }: BaseOptions & { bookState?: BookState; sort: [string, 'asc' | 'desc' | undefined] }) {
     const books = await Database.query()
       .select(
         'books.id',
@@ -69,7 +74,7 @@ export default class CollectionService {
           builder.whereNot('book_state', BookState.wishlist)
         }
       })
-      .orderBy('books.title')
+      .orderBy(`books.${string.snakeCase(sort[0])}`, sort[1])
     return await Promise.all(
       books.map(async (book) => {
         const author = (await Author.findOrFail(book.authorId)).serialize({
