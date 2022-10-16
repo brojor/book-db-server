@@ -1,0 +1,120 @@
+[
+  {
+    "title": "Badass",
+    "subtitle": "Making Users Awesome",
+    "isbn": "1491919019",
+    "pageCount": 286,
+    "publishedDate": "2015",
+    "publisher": "Oreilly & Associates Incorporated",
+    "language": "en",
+    "author": "Kathy Sierra"
+  },
+  {
+    "title": "Give and Take",
+    "subtitle": "Why Helping Others Drives Our Success",
+    "isbn": "9780143124986",
+    "pageCount": 321,
+    "publishedDate": "2014",
+    "publisher": "Penguin",
+    "language": "en",
+    "author": "Adam Grant"
+  },
+  {
+    "title": "Homo Deus",
+    "subtitle": "A Brief History of Tomorrow",
+    "isbn": "9780062464316",
+    "pageCount": 448,
+    "publishedDate": "2017",
+    "publisher": "Harper",
+    "language": "en",
+    "author": "Yuval Noah Harari"
+  },
+  {
+    "title": "It Doesn't Have to Be Crazy at Work",
+    "isbn": "62874780",
+    "pageCount": 240,
+    "publishedDate": "2018",
+    "publisher": "HarperBusiness",
+    "language": "en",
+    "author": "Jason Fried"
+  },
+  {
+    "title": "Live Work Work Work Die",
+    "subtitle": "A Journey Into the Savage Heart of Silicon Valley",
+    "isbn": "1627794859",
+    "pageCount": 321,
+    "publishedDate": "2018",
+    "publisher": "Metropolitan Books",
+    "language": "en",
+    "author": "Corey Pein"
+  },
+  {
+    "title": "Maverick",
+    "subtitle": "The Success Story Behind the World's Most Unusual Workplace",
+    "isbn": "446670553",
+    "pageCount": 352,
+    "publishedDate": "1995",
+    "publisher": "Grand Central Publishing",
+    "language": "en",
+    "author": "Ricardo Semler"
+  },
+  {
+    "title": "Reinventing Organizations",
+    "subtitle": "A Guide to Creating Organizations Inspired by the Next Stage of Human Consciousness",
+    "isbn": "2960133501",
+    "pageCount": 360,
+    "publishedDate": "2014",
+    "publisher": "Lightning Source Incorporated",
+    "language": "en",
+    "author": "Frederic Laloux"
+  },
+  {
+    "title": "Rework",
+    "isbn": "307463745",
+    "pageCount": 290,
+    "publishedDate": "2010",
+    "publisher": "Currency",
+    "language": "en",
+    "author": "Jason Fried"
+  },
+  {
+    "title": "Sapiens",
+    "subtitle": "A Brief History of Humankind",
+    "isbn": "9780062316097",
+    "pageCount": 464,
+    "publishedDate": "2015",
+    "publisher": "Harper",
+    "language": "en",
+    "author": "Yuval Noah Harari"
+  },
+  {
+    "title": "Talent Is Overrated",
+    "subtitle": "What Really Separates World-Class Performers from Everybody Else",
+    "isbn": "1591842948",
+    "pageCount": 258,
+    "publishedDate": "2010",
+    "publisher": "Penguin",
+    "language": "en",
+    "author": "Geoff Colvin"
+  },
+  {
+    "title": "The Design of Everyday Things",
+    "subtitle": "Revised and Expanded Edition",
+    "isbn": "9780465050659",
+    "pageCount": 370,
+    "publishedDate": "2013",
+    "publisher": "Constellation",
+    "language": "en",
+    "author": "Don Norman"
+  },
+  {
+    "title": "The Innovators",
+    "subtitle": "How a Group of Hackers, Geniuses, and Geeks Created the Digital Revolution",
+    "isbn": "1476708703",
+    "pageCount": 560,
+    "publishedDate": "2015",
+    "publisher": "Simon and Schuster",
+    "language": "en",
+    "author": "Walter Isaacson"
+  }
+]

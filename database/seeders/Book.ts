@@ -1,38 +1,24 @@
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
-import Collection from 'App/Models/Collection'
+import User from 'App/Models/User'
 import CollectionService from 'App/Services/CollectionService'
-import books from '../../books2'
+import books from '../../top12Wezeo.json'
+import Env from '@ioc:Adonis/Core/Env'
 
 export default class extends BaseSeeder {
   public async run() {
-    //   await CollectionFactory.with('books', 40).create()
-    //   await CollectionFactory.apply('wishlist').with('books', 10).create()
+    const user = await User.create({ email: 'john@doe.com', password: Env.get('JOHN_DOE_PASSWORD') })
+    const defaultCollection = await user.related('collections').create({ type: 1 })
 
-    const defaultCollection = await Collection.create({
-      type: CollectionType.DEFAULT,
-    })
-    const wishlistCollection = await Collection.create({
-      type: CollectionType.WISHLIST,
-    })
-
-    for (const [i, book] of books.entries()) {
-      if (i % 8 === 0) {
-        await CollectionService.addBook({
-          collection: wishlistCollection,
-          book: {
-            author: `${book.author_first_name} ${book.author_last_name}`,
-            title: book.title,
-          },
-        })
-      } else {
-        await CollectionService.addBook({
-          collection: defaultCollection,
-          book: {
-            author: `${book.author_first_name} ${book.author_last_name}`,
-            title: book.title,
-          },
-        })
-      }
+    for (const book of books) {
+      await CollectionService.addBook({
+        collection: defaultCollection,
+        book,
+        bookState: getRandomNumber(1, 4),
+      })
     }
   }
+}
+
+function getRandomNumber(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
 }
